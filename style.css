@@ -1,0 +1,205 @@
+/* Custom CSS for Kucharge EV Charger Payment System */
+
+/* Root variables for consistent theming */
+:root {
+    --primary-blue: #3B82F6;
+    --primary-green: #10B981;
+    --gradient-light: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 50%, #10B981 100%);
+    --gradient-dark: linear-gradient(135deg, #1F2937 0%, #111827 50%, #0F172A 100%);
+}
+
+/* Dark mode variables */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --text-primary: #F9FAFB;
+        --text-secondary: #D1D5DB;
+        --bg-card: rgba(31, 41, 55, 0.95);
+        --border-color: #374151;
+    }
+}
+
+/* Light mode variables */
+@media (prefers-color-scheme: light) {
+    :root {
+        --text-primary: #111827;
+        --text-secondary: #6B7280;
+        --bg-card: rgba(255, 255, 255, 0.95);
+        --border-color: #E5E7EB;
+    }
+}
+
+/* Enhanced gradient backgrounds */
+.bg-gradient-enhanced {
+    background: var(--gradient-light);
+}
+
+@media (prefers-color-scheme: dark) {
+    .bg-gradient-enhanced {
+        background: var(--gradient-dark);
+    }
+}
+
+/* Custom Loading Spinner Animation */
+.spinner {
+    width: 40px;
+    height: 40px;
+    position: relative;
+    margin: 0 auto;
+}
+
+/* Smaller spinner for success/fail pages */
+.spinner-small {
+    width: 24px;
+    height: 24px;
+    position: relative;
+    margin: 0 auto;
+}
+
+.double-bounce1,
+.double-bounce2 {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: linear-gradient(45deg, var(--primary-blue), var(--primary-green));
+    opacity: 0.6;
+    position: absolute;
+    top: 0;
+    left: 0;
+    animation: sk-bounce 2.0s infinite ease-in-out;
+}
+
+.double-bounce2 {
+    animation-delay: -1.0s;
+}
+
+@keyframes sk-bounce {
+
+    0%,
+    100% {
+        transform: scale(0);
+    }
+
+    50% {
+        transform: scale(1);
+    }
+}
+
+/* Enhanced card styles */
+.card-enhanced {
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-color);
+    box-shadow:
+        0 20px 25px -5px rgba(0, 0, 0, 0.1),
+        0 10px 10px -5px rgba(0, 0, 0, 0.04),
+        0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+@media (prefers-color-scheme: dark) {
+    .card-enhanced {
+        box-shadow:
+            0 20px 25px -5px rgba(0, 0, 0, 0.3),
+            0 10px 10px -5px rgba(0, 0, 0, 0.2),
+            0 0 0 1px rgba(255, 255, 255, 0.05);
+    }
+}
+
+/* Smooth transitions for theme switching */
+* {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Text gradient enhancement */
+.text-gradient {
+    background: linear-gradient(135deg, var(--primary-blue), var(--primary-green));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 700;
+}
+
+/* Pulsing animation for connecting status */
+.pulse-glow {
+    animation: pulse-glow 2s infinite;
+}
+
+@keyframes pulse-glow {
+
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.8;
+        transform: scale(1.02);
+    }
+}
+
+/* Mobile-first responsive enhancements */
+@media (max-width: 480px) {
+    .mobile-padding {
+        padding: 1rem;
+    }
+
+    .mobile-text-sm {
+        font-size: 0.875rem;
+    }
+}
+
+/* Focus states for accessibility */
+button:focus,
+a:focus {
+    outline: 2px solid var(--primary-blue);
+    outline-offset: 2px;
+}
+
+/* Custom scrollbar for dark mode */
+@media (prefers-color-scheme: dark) {
+    ::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: #1F2937;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: #4B5563;
+        border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: #6B7280;
+    }
+}
+
+/* Status indicator animations */
+.status-connecting {
+    position: relative;
+}
+
+.status-connecting::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: -20px;
+    width: 8px;
+    height: 8px;
+    background: var(--primary-green);
+    border-radius: 50%;
+    animation: blink 1.5s infinite;
+}
+
+@keyframes blink {
+
+    0%,
+    50% {
+        opacity: 1;
+    }
+
+    51%,
+    100% {
+        opacity: 0.3;
+    }
+}

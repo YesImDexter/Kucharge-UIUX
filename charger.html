@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Charger <!-- Back Button -->
+        <div class="text-center">
+            <button onclick="goBack()"
+                class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 text-sm font-medium transition-colors duration-200">
+                ← Back to Home
+            </button>
+        </div> - Kucharge
+    </title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Configure Tailwind for dark mode -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-blue': '#3B82F6',
+                        'primary-green': '#10B981',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="h-full bg-white dark:bg-gray-900 transition-colors duration-300">
+
+
+    <div class="min-h-full flex items-center justify-center px-4 py-6 sm:px-6 lg:px-8">
+        <div class="max-w-md w-full space-y-6">
+
+            <!-- Header with Logo -->
+            <div class="text-center">
+                <div class="mb-4">
+                    <img src="Images/Logo.png" alt="Kucharge" class="h-12 mx-auto">
+                </div>
+                <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                    EV Charger Payment System
+                </p>
+            </div>
+
+            <!-- Location Image Card -->
+            <div
+                class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-2xl overflow-hidden">
+                <div class="relative">
+                    <img src="Location.jpg" alt="Sheraton Hotel" class="w-full h-48 object-cover">
+                    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
+                        <h3 class="text-white font-semibold text-lg">Sheraton Hotel</h3>
+                        <p class="text-white/90 text-sm">Premium EV Charging Station</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payment Amount Selection Card -->
+            <div
+                class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-2xl p-6 relative">
+
+                <!-- Dark Mode Toggle - Top Right of Container -->
+                <div class="absolute top-4 right-4">
+                    <button id="dark-mode-toggle" onclick="toggleDarkMode()"
+                        class="px-3 py-2 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 text-xs font-medium">
+                        <span class="text-blue-400">🌙</span> Dark
+                    </button>
+                </div>
+
+                <div class="text-center mb-6">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                        Select Amount to Pay
+                    </h3>
+                    <div class="w-12 h-1 bg-gradient-to-r from-blue-600 to-green-600 mx-auto rounded-full"></div>
+                </div>
+
+                <!-- Predefined Amount Buttons -->
+                <div class="grid grid-cols-3 gap-3 mb-6">
+                    <button onclick="selectAmount(5)"
+                        class="amount-btn p-3 border-2 border-gray-200 dark:border-gray-600 rounded-lg text-center font-semibold text-gray-700 dark:text-gray-300 hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-200"
+                        data-amount="5">
+                        RM5
+                    </button>
+                    <button onclick="selectAmount(10)"
+                        class="amount-btn p-3 border-2 border-gray-200 dark:border-gray-600 rounded-lg text-center font-semibold text-gray-700 dark:text-gray-300 hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-200"
+                        data-amount="10">
+                        RM10
+                    </button>
+                    <button onclick="selectAmount(15)"
+                        class="amount-btn p-3 border-2 border-gray-200 dark:border-gray-600 rounded-lg text-center font-semibold text-gray-700 dark:text-gray-300 hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-200"
+                        data-amount="15">
+                        RM15
+                    </button>
+                </div>
+
+                <!-- Custom Amount Input -->
+                <div class="mb-6">
+                    <label for="custom-amount" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Or enter custom amount:
+                    </label>
+                    <div class="relative">
+                        <span
+                            class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400">RM</span>
+                        <input type="number" id="custom-amount" placeholder="0.00" min="1" step="0.01"
+                            onchange="selectCustomAmount(this.value)" oninput="selectCustomAmount(this.value)"
+                            class="w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                    </div>
+                </div>
+
+                <!-- Selected Amount Display -->
+                <div id="selected-amount-display"
+                    class="mb-6 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-lg text-center hidden">
+                    <span class="text-sm text-blue-700 dark:text-blue-300">Selected Amount: </span>
+                    <span id="selected-amount-value" class="font-bold text-blue-900 dark:text-blue-100">RM0</span>
+                </div>
+
+                <!-- Proceed Button -->
+                <button id="proceed-btn" onclick="proceedToPayment()" disabled
+                    class="w-full py-3 px-4 bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 font-semibold rounded-lg cursor-not-allowed transition-all duration-200">
+                    Proceed to Payment
+                </button>
+            </div>
+
+            <!-- Charger Details Card -->
+            <div
+                class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-2xl p-6">
+                <div class="text-center mb-6">
+                    <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                        Charger Details
+                    </h2>
+                    <div class="w-16 h-1 bg-gradient-to-r from-blue-600 to-green-600 mx-auto rounded-full"></div>
+                </div>
+
+                <!-- Charger Info -->
+                <div class="space-y-4 mb-6">
+                    <div class="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                        <span class="text-sm font-medium text-gray-600 dark:text-gray-300">Charger ID</span>
+                        <span id="charger-id" class="text-sm font-bold text-gray-900 dark:text-white">Loading...</span>
+                    </div>
+
+                    <div class="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                        <span class="text-sm font-medium text-gray-600 dark:text-gray-300">Location</span>
+                        <span id="charger-location" class="text-sm font-semibold text-gray-900 dark:text-white">Sheraton
+                            Hotel</span>
+                    </div>
+
+                    <div class="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                        <span class="text-sm font-medium text-gray-600 dark:text-gray-300">Address</span>
+                        <span id="charger-address"
+                            class="text-sm font-semibold text-gray-900 dark:text-white text-right">Jalan Sultan Ismail,
+                            KL</span>
+                    </div>
+
+                    <div class="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                        <span class="text-sm font-medium text-gray-600 dark:text-gray-300">Type</span>
+                        <span id="charger-type" class="text-sm font-semibold text-gray-900 dark:text-white">DC Fast
+                            Charger</span>
+                    </div>
+
+                    <div class="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                        <span class="text-sm font-medium text-gray-600 dark:text-gray-300">Power Output</span>
+                        <span id="charger-power"
+                            class="text-sm font-semibold text-blue-600 dark:text-blue-400">50kW</span>
+                    </div>
+
+                    <div class="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                        <span class="text-sm font-medium text-gray-600 dark:text-gray-300">Connector Type</span>
+                        <span id="charger-connector" class="text-sm font-semibold text-gray-900 dark:text-white">CCS2 &
+                            CHAdeMO</span>
+                    </div>
+
+                    <div class="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                        <span class="text-sm font-medium text-gray-600 dark:text-gray-300">Rate</span>
+                        <span id="charger-rate" class="text-sm font-semibold text-green-600 dark:text-green-400">RM
+                            0.75/kWh</span>
+                    </div>
+
+                    <div class="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                        <span class="text-sm font-medium text-gray-600 dark:text-gray-300">Status</span>
+                        <span id="charger-status"
+                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+                            <span class="w-1.5 h-1.5 bg-green-500 rounded-full mr-1.5"></span>
+                            Available
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Back Button -->
+            <div class="text-center">
+                <button onclick="goBack()"
+                    class="text-white/80 dark:text-gray-400 hover:text-white dark:hover:text-gray-200 text-sm font-medium transition-colors duration-200">
+                    ← Back to Home
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="script.js"></script>
+    <script>
+        let selectedAmount = 0;
+        let chargerId = '';
+
+        // Initialize charger page
+        function initializeChargerPage() {
+            chargerId = getChargerIdFromURL();
+            if (chargerId) {
+                document.getElementById('charger-id').textContent = chargerId.toUpperCase();
+
+                // Mock different charger data based on charger ID
+                if (chargerId.includes('default')) {
+                    updateChargerInfo('Sheraton Hotel', 'Jalan Sultan Ismail, KL', 'DC Fast Charger', '50kW', 'CCS2 & CHAdeMO', 'RM 0.75/kWh', 'Available');
+                } else if (chargerId.includes('123')) {
+                    updateChargerInfo('KLCC Suria Mall', '241 Jalan Ampang, KL', 'AC Charger', '22kW', 'Type 2', 'RM 0.60/kWh', 'Available');
+                } else {
+                    updateChargerInfo('Pavilion KL', '168 Jalan Bukit Bintang, KL', 'DC Fast Charger', '120kW', 'CCS2 & CHAdeMO', 'RM 0.85/kWh', 'Available');
+                }
+            } else {
+                // Redirect back to home if no charger ID
+                window.location.href = 'index.html';
+            }
+        }
+
+        // Update charger information
+        function updateChargerInfo(location, address, type, power, connector, rate, status) {
+            document.getElementById('charger-location').textContent = location;
+            document.getElementById('charger-address').textContent = address;
+            document.getElementById('charger-type').textContent = type;
+            document.getElementById('charger-power').textContent = power;
+            document.getElementById('charger-connector').textContent = connector;
+            document.getElementById('charger-rate').textContent = rate;
+
+            const statusElement = document.getElementById('charger-status');
+            if (status === 'Available') {
+                statusElement.innerHTML = '<span class="w-1.5 h-1.5 bg-green-500 rounded-full mr-1.5"></span>Available';
+                statusElement.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
+            } else {
+                statusElement.innerHTML = '<span class="w-1.5 h-1.5 bg-red-500 rounded-full mr-1.5"></span>Occupied';
+                statusElement.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200';
+            }
+        }
+
+        // Select predefined amount
+        function selectAmount(amount) {
+            selectedAmount = amount;
+            updateAmountSelection();
+
+            // Clear custom input
+            document.getElementById('custom-amount').value = '';
+
+            // Update button styles
+            document.querySelectorAll('.amount-btn').forEach(btn => {
+                btn.classList.remove('border-blue-500', 'bg-blue-500', 'text-white');
+                btn.classList.add('border-gray-200', 'dark:border-gray-600', 'text-gray-700', 'dark:text-gray-300');
+            });
+
+            const selectedBtn = document.querySelector(`[data-amount="${amount}"]`);
+            selectedBtn.classList.remove('border-gray-200', 'dark:border-gray-600', 'text-gray-700', 'dark:text-gray-300');
+            selectedBtn.classList.add('border-blue-500', 'bg-blue-500', 'text-white');
+        }
+
+        // Select custom amount
+        function selectCustomAmount(amount) {
+            const numAmount = parseFloat(amount);
+            if (numAmount > 0) {
+                selectedAmount = numAmount;
+                updateAmountSelection();
+
+                // Clear predefined button selections
+                document.querySelectorAll('.amount-btn').forEach(btn => {
+                    btn.classList.remove('border-blue-500', 'bg-blue-500', 'text-white');
+                    btn.classList.add('border-gray-200', 'dark:border-gray-600', 'text-gray-700', 'dark:text-gray-300');
+                });
+            } else {
+                selectedAmount = 0;
+                updateAmountSelection();
+            }
+        }
+
+        // Update amount selection display and proceed button
+        function updateAmountSelection() {
+            const display = document.getElementById('selected-amount-display');
+            const value = document.getElementById('selected-amount-value');
+            const proceedBtn = document.getElementById('proceed-btn');
+
+            if (selectedAmount > 0) {
+                display.classList.remove('hidden');
+                value.textContent = `RM${selectedAmount.toFixed(2)}`;
+
+                proceedBtn.disabled = false;
+                proceedBtn.classList.remove('bg-gray-300', 'dark:bg-gray-600', 'text-gray-500', 'dark:text-gray-400', 'cursor-not-allowed');
+                proceedBtn.classList.add('bg-gradient-to-r', 'from-blue-600', 'to-green-600', 'text-white', 'hover:from-blue-700', 'hover:to-green-700', 'cursor-pointer');
+                proceedBtn.textContent = 'Proceed to Payment';
+            } else {
+                display.classList.add('hidden');
+
+                proceedBtn.disabled = true;
+                proceedBtn.classList.add('bg-gray-300', 'dark:bg-gray-600', 'text-gray-500', 'dark:text-gray-400', 'cursor-not-allowed');
+                proceedBtn.classList.remove('bg-gradient-to-r', 'from-blue-600', 'to-green-600', 'text-white', 'hover:from-blue-700', 'hover:to-green-700', 'cursor-pointer');
+                proceedBtn.textContent = 'Proceed to Payment';
+            }
+        }
+
+        // Proceed to payment
+        function proceedToPayment() {
+            if (selectedAmount > 0 && chargerId) {
+                window.location.href = `payment.html?charger_id=${chargerId}&amount=${selectedAmount}`;
+            }
+        }
+
+        // Go back to home
+        function goBack() {
+            window.location.href = 'index.html';
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', initializeChargerPage);
+    </script>
+</body>
+
+</html>
