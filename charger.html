@@ -37,6 +37,47 @@
 
 <body class="h-full bg-white dark:bg-gray-900 transition-colors duration-300">
 
+    <!-- Phone Number Modal -->
+    <div id="phone-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full p-6 transform transition-all">
+            <div class="text-center mb-6">
+                <div
+                    class="w-16 h-16 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="text-blue-600 dark:text-blue-400">
+                        <path
+                            d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                    </svg>
+                </div>
+                <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Phone Number Required</h2>
+                <p class="text-sm text-gray-600 dark:text-gray-400">Please enter your phone number to continue with the
+                    charging session.</p>
+            </div>
+
+            <form id="phone-form" class="space-y-4">
+                <div>
+                    <label for="phone-input" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Phone Number *
+                    </label>
+                    <input type="tel" id="phone-input" placeholder="+60 12-345-6789" required
+                        class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400">
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Format: +60 12-345-6789</p>
+                </div>
+
+                <div class="flex gap-3 pt-4">
+                    <button type="button" onclick="closePhoneModal()"
+                        class="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200 font-medium">
+                        Cancel
+                    </button>
+                    <button type="submit"
+                        class="flex-1 px-4 py-3 bg-gradient-to-r from-blue-600 to-green-600 text-white rounded-lg hover:from-blue-700 hover:to-green-700 transition-all duration-200 font-medium">
+                        Continue
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <div class="min-h-full flex items-center justify-center px-4 py-6 sm:px-6 lg:px-8">
         <div class="max-w-md w-full space-y-6">
@@ -72,6 +113,21 @@
                     <button id="dark-mode-toggle" onclick="toggleDarkMode()"
                         class="px-3 py-2 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 text-xs font-medium">
                         <span class="text-blue-400">🌙</span> Dark
+                    </button>
+                </div>
+
+                <!-- Help Button - Top Left of Container -->
+                <div class="absolute top-4 left-4">
+                    <button onclick="showHelpModal()"
+                        class="px-3 py-2 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 text-xs font-medium flex items-center gap-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="text-blue-600 dark:text-blue-400">
+                            <circle cx="12" cy="12" r="10" />
+                            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+                            <circle cx="12" cy="17" r=".5" />
+                        </svg>
+                        Help
                     </button>
                 </div>
 
@@ -209,6 +265,7 @@
     <script>
         let selectedAmount = 0;
         let chargerId = '';
+        let userPhoneNumber = '';
 
         // Initialize charger page
         function initializeChargerPage() {
@@ -224,11 +281,59 @@
                 } else {
                     updateChargerInfo('Pavilion KL', '168 Jalan Bukit Bintang, KL', 'DC Fast Charger', '120kW', 'CCS2 & CHAdeMO', 'RM 0.85/kWh', 'Available');
                 }
+
+                // Show phone modal immediately
+                showPhoneModal();
             } else {
                 // Redirect back to home if no charger ID
                 window.location.href = 'index.html';
             }
         }
+
+        // Show phone number modal
+        function showPhoneModal() {
+            document.getElementById('phone-modal').style.display = 'flex';
+            document.getElementById('phone-input').focus();
+        }
+
+        // Close phone modal (with warning)
+        function closePhoneModal() {
+            if (confirm('Phone number is required to continue. Do you want to go back to home?')) {
+                window.location.href = 'index.html';
+            }
+        }
+
+        // Handle phone form submission
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('phone-form').addEventListener('submit', function (e) {
+                e.preventDefault();
+
+                const phoneInput = document.getElementById('phone-input');
+                const phone = phoneInput.value.trim();
+
+                if (!phone) {
+                    alert('Please enter a valid phone number.');
+                    phoneInput.focus();
+                    return;
+                }
+
+                // Basic phone validation (allow various formats)
+                const phoneRegex = /^[\+]?[0-9\s\-\(\)]{8,15}$/;
+                if (!phoneRegex.test(phone)) {
+                    alert('Please enter a valid phone number (8-15 digits).');
+                    phoneInput.focus();
+                    return;
+                }
+
+                // Store phone number and hide modal
+                userPhoneNumber = phone;
+                localStorage.setItem('userPhoneNumber', phone);
+                document.getElementById('phone-modal').style.display = 'none';
+            });
+
+            // Initialize the page
+            initializeChargerPage();
+        });
 
         // Update charger information
         function updateChargerInfo(location, address, type, power, connector, rate, status) {
@@ -312,8 +417,12 @@
 
         // Proceed to payment
         function proceedToPayment() {
-            if (selectedAmount > 0 && chargerId) {
+            if (selectedAmount > 0 && chargerId && userPhoneNumber) {
+                // Store phone number for later use
+                localStorage.setItem('userPhoneNumber', userPhoneNumber);
                 window.location.href = `payment.html?charger_id=${chargerId}&amount=${selectedAmount}`;
+            } else if (!userPhoneNumber) {
+                showPhoneModal();
             }
         }
 
@@ -321,9 +430,6 @@
         function goBack() {
             window.location.href = 'index.html';
         }
-
-        // Initialize when page loads
-        document.addEventListener('DOMContentLoaded', initializeChargerPage);
     </script>
 </body>
 
